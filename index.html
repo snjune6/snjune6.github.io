@@ -1,9 +1,337 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="ko">
 <head>
-<title>test</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>구글 플레이 개발자 등록 승인 여정</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            max-width: 500px;
+            width: 100%;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #34a853 0%, #4285f4 100%);
+            padding: 40px 30px;
+            text-align: center;
+            color: white;
+        }
+        
+        .app-logo {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 20px;
+            background: white;
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .app-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 24px;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .header p {
+            font-size: 16px;
+            opacity: 0.95;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .timeline {
+            position: relative;
+            padding-left: 40px;
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: 30px;
+            animation: fadeInUp 0.6s ease forwards;
+            opacity: 0;
+        }
+        
+        .timeline-item:nth-child(1) { animation-delay: 0.1s; }
+        .timeline-item:nth-child(2) { animation-delay: 0.2s; }
+        .timeline-item:nth-child(3) { animation-delay: 0.3s; }
+        .timeline-item:nth-child(4) { animation-delay: 0.4s; }
+        .timeline-item:nth-child(5) { animation-delay: 0.5s; }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .timeline-dot {
+            position: absolute;
+            left: -33px;
+            top: 5px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: white;
+            border: 3px solid #667eea;
+            z-index: 1;
+        }
+        
+        .timeline-dot.rejected {
+            border-color: #ea4335;
+        }
+        
+        .timeline-dot.approved {
+            border-color: #34a853;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(52, 168, 83, 0.7);
+            }
+            50% {
+                transform: scale(1.1);
+                box-shadow: 0 0 0 10px rgba(52, 168, 83, 0);
+            }
+        }
+        
+        .timeline-content {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .timeline-content.rejected {
+            border-left-color: #ea4335;
+            background: #fef0f0;
+        }
+        
+        .timeline-content.approved {
+            border-left-color: #34a853;
+            background: #f0fdf4;
+        }
+        
+        .timeline-date {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        .timeline-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #333;
+        }
+        
+        .timeline-text {
+            font-size: 14px;
+            color: #555;
+            line-height: 1.6;
+        }
+        
+        .emoji {
+            font-size: 20px;
+            margin-right: 8px;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+            margin: 20px 0;
+            border-radius: 12px;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 32px;
+            font-weight: 700;
+            color: #667eea;
+            display: block;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px 30px 30px;
+            color: #666;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+        
+        .email-proof {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border: 2px dashed #ddd;
+        }
+        
+        .email-proof img {
+            width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .email-proof-label {
+            font-size: 12px;
+            color: #999;
+            margin-top: 10px;
+            font-style: italic;
+        }
+        
+        .hashtags {
+            color: #667eea;
+            font-weight: 600;
+            margin-top: 15px;
+            font-size: 13px;
+        }
+    </style>
 </head>
 <body>
-testtestasdasdasds
+    <div class="container">
+        <div class="header">
+            <div class="app-logo">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect fill='%23e0e0e0' width='200' height='200'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='20' fill='%23999'%3ELogo%3C/text%3E%3C/svg%3E" alt="Handy Home Logo">
+            </div>
+            <h1>🎉 드디어 승인!</h1>
+            <p>Handy Home 앱 출시를 위한 개발자 등록 여정</p>
+        </div>
+        
+        <div class="content">
+            <div class="stats">
+                <div class="stat-item">
+                    <span class="stat-number">7</span>
+                    <span class="stat-label">일간의 도전</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">6</span>
+                    <span class="stat-label">거절 메일</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">1</span>
+                    <span class="stat-label">최종 승인</span>
+                </div>
+            </div>
+            
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">10월 3일 (추석 연휴 시작)</div>
+                        <div class="timeline-title"><span class="emoji">📱</span>새로운 시작</div>
+                        <div class="timeline-text">Handy Home 앱 출시를 위해 기존 계정 중단으로 새 개발자 계정 등록 시도</div>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-dot rejected"></div>
+                    <div class="timeline-content rejected">
+                        <div class="timeline-date">10월 6일 - 10월 8일</div>
+                        <div class="timeline-title"><span class="emoji">❌</span>연속 거절</div>
+                        <div class="timeline-text">개발자 자격 심사 거절 메일 폭탄... 추석 연휴 내내 멘탈 관리 중</div>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-dot rejected"></div>
+                    <div class="timeline-content rejected">
+                        <div class="timeline-date">10월 8일 오후 9:36</div>
+                        <div class="timeline-title"><span class="emoji">🔄</span>재도전</div>
+                        <div class="timeline-text">본인 인증 재시도... 이번엔 될까?</div>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-dot rejected"></div>
+                    <div class="timeline-content rejected">
+                        <div class="timeline-date">10월 9일 오전 5:56 - 9:59</div>
+                        <div class="timeline-title"><span class="emoji">😤</span>포기하지 않기</div>
+                        <div class="timeline-text">새벽부터 다시 시도... 업데이트 완료했으나 또 거절</div>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-dot approved"></div>
+                    <div class="timeline-content approved">
+                        <div class="timeline-date">10월 9일 오전 10:00</div>
+                        <div class="timeline-title"><span class="emoji">✅</span>드디어 승인!</div>
+                        <div class="timeline-text">개발자 등록 완료! 이제 Handy Home을 세상에 선보일 수 있다 🎊</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="email-proof">
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 200'%3E%3Crect fill='%23f0f0f0' width='400' height='200'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='16' fill='%23999'%3E구글 메일 리스트 스크린샷%3C/text%3E%3C/svg%3E" alt="구글 플레이 거절 메일들">
+            <div class="email-proof-label">📧 실제 받았던 거절 메일들</div>
+        </div>
+        
+        <div class="footer">
+            <strong>포기하지 않으면 결국 이룬다!</strong><br>
+            추석 연휴 내내 거절당했지만<br>
+            끝까지 도전해서 결국 승인받았습니다 💪
+            
+            <div class="hashtags">
+                #구글플레이 #개발자등록 #앱개발 #포기하지않기<br>
+                #개발자 #앱출시 #도전 #성공스토리
+            </div>
+        </div>
+    </div>
 </body>
 </html>
