@@ -1,0 +1,19 @@
+name: 기능 제안
+description: 페이지에 넣을 내용이나 저장소 작업을 제안합니다.
+title: "feat: "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: change
+    attributes:
+      label: 바꿀 내용
+      description: 방문자에게 무엇이 달라지는지 적습니다.
+    validations:
+      required: true
+  - type: textarea
+    id: done
+    attributes:
+      label: 완료 기준
+      description: 어떤 상태면 이슈를 닫을 수 있는지 적습니다.
+    validations:
+      required: true

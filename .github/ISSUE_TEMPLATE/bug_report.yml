@@ -1,0 +1,26 @@
+name: 버그 리포트
+description: 공개 페이지에서 기대와 다르게 보이는 문제를 적습니다.
+title: "fix: "
+labels: ["bug"]
+body:
+  - type: textarea
+    id: expected
+    attributes:
+      label: 기대한 화면
+      description: 어떤 화면이 나와야 했는지 적습니다.
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: 실제 화면
+      description: 지금 어떻게 보이는지 적습니다.
+    validations:
+      required: true
+  - type: input
+    id: width
+    attributes:
+      label: 확인한 화면 폭
+      placeholder: 1440px 또는 390px
+    validations:
+      required: true
