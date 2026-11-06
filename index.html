@@ -1,116 +1,515 @@
 <!DOCTYPE html>
-<html lang="ko">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>김준태 · snjune6</title>
-    <meta
-      name="description"
-      content="부산에서 웹과 앱을 만드는 김준태의 작업 페이지입니다. 공개 저장소와 연락처를 모아 둡니다."
-    />
-    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600&family=Nanum+Myeongjo:wght@700&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="styles.css" />
-  </head>
-  <body>
-    <a class="skip-link" href="#main">본문으로 건너뛰기</a>
-    <header class="site-header">
-      <p class="mark">snjune6</p>
-      <p class="place">부산</p>
+<html lang="ko" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>kkx2 - Developer Portfolio</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Devicon (기술 스택 아이콘 라이브러리) -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
+    <!-- Google Fonts: Noto Sans KR -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700;900&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class', // 다크모드 활성화
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Noto Sans KR"', 'sans-serif'],
+                    },
+                    colors: {
+                        black: '#111111',
+                        darkBg: '#0a0a0a',
+                        darkSurface: '#1a1a1a',
+                        gray: '#f4f4f4',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* 텍스트 선택 시 색상 */
+        ::selection {
+            background-color: #111111;
+            color: #ffffff;
+        }
+        .dark ::selection {
+            background-color: #ffffff;
+            color: #111111;
+        }
+
+        /* Smart Header Transitions */
+        #floating-pill {
+            transition: max-width 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+                        padding 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+                        gap 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+                        opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+                        transform 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+                        background-color 0.3s ease,
+                        color 0.3s ease;
+            max-width: 900px; 
+        }
+        .pill-shrunk {
+            max-width: 120px !important;
+            padding-top: 0.75rem !important; 
+            padding-bottom: 0.75rem !important;
+            padding-left: 1.5rem !important; 
+            padding-right: 1.5rem !important;
+            gap: 0 !important;
+            opacity: 0.25;
+            transform: scale(0.9);
+        }
+        .pill-shrunk:hover {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        .nav-items-wrapper {
+            transition: opacity 0.3s ease, max-width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            white-space: nowrap;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            gap: 2.5rem;
+        }
+        
+        .nav-shrunk {
+            max-width: 0 !important;
+            opacity: 0 !important;
+            pointer-events: none;
+            gap: 0 !important;
+        }
+
+        /* Marquee Animation (기술 스택 전광판) */
+        .marquee-container {
+            overflow: hidden;
+            white-space: nowrap;
+            width: 100%;
+        }
+        .marquee-content {
+            display: inline-flex;
+            align-items: center;
+            animation: marquee 25s linear infinite;
+        }
+        @keyframes marquee {
+            0% { transform: translateX(0%); }
+            100% { transform: translateX(-50%); }
+        }
+        /* 기술 스택 아이콘 흑백 처리 (미니멀리즘 유지) */
+        .tech-icon {
+            font-size: 1.1em;
+            /* 원본 색상을 날리고 순수 블랙으로 변환 */
+            filter: grayscale(100%) brightness(0);
+            transition: filter 0.5s ease;
+        }
+        .dark .tech-icon {
+            /* 다크 모드일 때는 색상을 반전시켜 순수 화이트로 변환 */
+            filter: grayscale(100%) brightness(0) invert(1);
+        }
+
+        /* Accordion Transitions */
+        .accordion-content {
+            transition: max-height 0.4s ease-in-out, opacity 0.4s ease-in-out, margin 0.4s ease-in-out;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+        }
+        .accordion-content.open {
+            max-height: 800px; /* 충분히 큰 값 */
+            opacity: 1;
+            margin-top: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .accordion-icon {
+            transition: transform 0.3s ease;
+        }
+        .accordion-btn[aria-expanded="true"] .accordion-icon {
+            transform: rotate(45deg);
+        }
+    </style>
+</head>
+<!-- body에 전환 효과를 주어 다크모드 변경 시 부드럽게 색상이 바뀌도록 함 -->
+<body class="font-sans text-black bg-white dark:bg-darkBg dark:text-white antialiased transition-colors duration-500">
+
+    <!-- Unconventional Floating Header -->
+    <header class="fixed bottom-6 md:top-8 md:bottom-auto left-1/2 transform -translate-x-1/2 z-50 w-[92%] md:w-auto flex flex-col items-center">
+        <!-- Floating Pill -->
+        <div id="floating-pill" class="w-full md:w-auto bg-black text-white dark:bg-white dark:text-black rounded-full px-8 md:px-10 py-4 md:py-5 flex justify-between items-center gap-8 md:gap-16 shadow-[0_10px_40px_rgba(0,0,0,0.2)] dark:shadow-[0_10px_40px_rgba(255,255,255,0.1)] border border-gray-800 dark:border-gray-200 cursor-pointer">
+            <!-- Logo -->
+            <a href="#" class="font-black text-2xl tracking-tighter hover:opacity-50 transition-opacity shrink-0">
+                kkx2
+            </a>
+
+            <!-- Nav Items (Desktop Menu & Buttons) -->
+            <div id="nav-wrapper" class="nav-items-wrapper">
+                <nav class="hidden md:flex gap-10 font-bold text-sm uppercase tracking-widest">
+                    <a href="#work" class="hover:line-through transition-all">Work</a>
+                    <a href="#experience" class="hover:line-through transition-all">Exp</a>
+                    <a href="#contact" class="hover:line-through transition-all">Contact</a>
+                </nav>
+
+                <div class="flex items-center gap-6">
+                    <!-- Dark Mode Toggle Button -->
+                    <button id="theme-toggle" class="hover:opacity-50 transition-opacity w-8 h-8 flex justify-center items-center rounded-full border border-gray-700 dark:border-gray-300" aria-label="Toggle Dark Mode">
+                        <!-- Sun Icon (shows in dark mode) -->
+                        <svg class="w-4 h-4 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                        </svg>
+                        <!-- Moon Icon (shows in light mode) -->
+                        <svg class="w-4 h-4 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                        </svg>
+                    </button>
+
+                    <!-- Mobile Menu Button -->
+                    <button id="mobile-menu-btn" class="md:hidden font-bold text-sm uppercase tracking-widest hover:opacity-50 transition-opacity">
+                        Menu
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Dropdown (Floating Card opening upwards) -->
+        <div id="mobile-menu" class="hidden absolute bottom-[calc(100%+16px)] left-0 w-full bg-black text-white dark:bg-white dark:text-black rounded-[2rem] p-8 shadow-2xl border border-gray-800 dark:border-gray-200 transition-colors duration-500">
+            <nav class="flex flex-col text-center font-bold text-2xl uppercase tracking-widest gap-8 py-4">
+                <a href="#work" class="mobile-link hover:line-through">Work</a>
+                <a href="#experience" class="mobile-link hover:line-through">Experience</a>
+                <a href="#contact" class="mobile-link hover:line-through">Contact</a>
+            </nav>
+        </div>
     </header>
-    <main id="main">
-      <section class="hero" aria-labelledby="name">
-        <p class="eyebrow">개발자</p>
-        <h1 id="name">김준태</h1>
-        <p class="lede">
-          웹과 앱을 오가며 만듭니다. 공개된 작업은 저장소에 두고, 변경은 이슈와
-          풀 리퀘스트로 남깁니다.
-        </p>
-        <p class="actions">
-          <a class="button" href="https://github.com/snjune6">GitHub</a>
-          <a class="button button-quiet" href="mailto:snjune6@naver.com">메일 보내기</a>
-        </p>
-      </section>
 
-      <section class="block" id="about" aria-labelledby="about-title">
-        <h2 id="about-title">소개</h2>
-        <p>
-          GitHub에서는 <strong>snjune6</strong>으로 활동합니다. HTML로 만든
-          홈페이지, JavaScript 배포 자동화, SwiftUI 로그인, PHP와 TypeScript
-          저장소를 공개해 두었습니다.
-        </p>
-        <p>GitHub 프로필에는 부산, Santamonica로 적혀 있습니다.</p>
-      </section>
+    <!-- Hero Section -->
+    <section class="pt-24 pb-12 md:pt-52 md:pb-24 px-6 md:px-12">
+        <div class="max-w-7xl mx-auto">
+            <h1 class="text-5xl md:text-7xl lg:text-9xl font-black leading-[1.1] tracking-tighter break-keep font-mono">
+                $ clean_code<br>
+                --optimize<br>
+                --scale=infinite
+            </h1>
+            <p class="mt-8 md:mt-12 text-lg md:text-2xl font-light text-gray-500 dark:text-gray-400 max-w-2xl leading-relaxed break-keep">
+                복잡함을 걷어내고 본질에 집중합니다.<br class="hidden md:block">
+                성능 최적화와 매끄러운 사용자 경험(UX)을 고민하며, 확장 가능하고 유지보수가 용이한 코드를 작성합니다.
+            </p>
+        </div>
+    </section>
 
-      <section class="block" id="work" aria-labelledby="work-title">
-        <h2 id="work-title">작업</h2>
-        <ul class="work-list">
-          <li>
-            <a href="https://github.com/snjune6/santamonica-boy">
-              <span class="lang">HTML</span>
-              <span class="work-name">Santamonica Boy</span>
-              <span class="work-note">Santamonica Boy 홈페이지</span>
-            </a>
-          </li>
-          <li>
-            <a href="https://github.com/snjune6/Automated_Design_Deployment">
-              <span class="lang">JavaScript</span>
-              <span class="work-name">Automated Design Deployment</span>
-              <span class="work-note">JavaScript 공개 저장소</span>
-            </a>
-          </li>
-          <li>
-            <a href="https://github.com/snjune6/SimpleAppleLogin">
-              <span class="lang">Swift</span>
-              <span class="work-name">SimpleAppleLogin</span>
-              <span class="work-note">SwiftUI로 구성한 Apple 로그인</span>
-            </a>
-          </li>
-          <li>
-            <a href="https://github.com/snjune6/ZIPTALK">
-              <span class="lang">PHP</span>
-              <span class="work-name">ZIPTALK</span>
-              <span class="work-note">PHP 공개 저장소</span>
-            </a>
-          </li>
-          <li>
-            <a href="https://github.com/snjune6/Next.js">
-              <span class="lang">TypeScript</span>
-              <span class="work-name">Next.js</span>
-              <span class="work-note">TypeScript 공개 저장소</span>
-            </a>
-          </li>
-        </ul>
-      </section>
+    <!-- Tech Stack Marquee (아이콘 추가 및 스타일 개선) -->
+    <div class="marquee-container py-4 md:py-6 border-y border-black dark:border-white bg-gray dark:bg-darkSurface transition-colors duration-500 overflow-hidden flex">
+        <!-- 텍스트를 두 번 반복하여 끊기지 않게 연결 -->
+        <div class="marquee-content text-2xl md:text-4xl font-black uppercase tracking-widest text-black dark:text-white whitespace-nowrap">
+            <!-- 1st Loop -->
+            <span class="flex items-center gap-3"><i class="devicon-react-original tech-icon"></i> REACT</span>
+            <span class="mx-6">·</span>
+            <span class="flex items-center gap-3"><i class="devicon-typescript-plain tech-icon"></i> TYPESCRIPT</span>
+            <span class="mx-6">·</span>
+            <span class="flex items-center gap-3"><i class="devicon-nextjs-plain tech-icon"></i> NEXT.JS</span>
+            <span class="mx-6">·</span>
+            <span class="flex items-center gap-3"><i class="devicon-nodejs-plain-wordmark tech-icon text-4xl"></i> NODE.JS</span>
+            <span class="mx-6">·</span>
+            <span class="flex items-center gap-3"><i class="devicon-spring-original tech-icon"></i> SPRING BOOT</span>
+            <span class="mx-6">·</span>
+            <span class="flex items-center gap-3"><i class="devicon-amazonwebservices-plain-wordmark tech-icon text-4xl"></i> AWS</span>
+            <span class="mx-6">·</span>
+            <span class="flex items-center gap-3"><i class="devicon-python-plain tech-icon"></i> PYTHON</span>
+            <span class="mx-6">·</span>
+            <span class="flex items-center gap-3"><i class="devicon-docker-plain tech-icon"></i> DOCKER</span>
+            <span class="mx-6">·</span>
+            <span class="flex items-center gap-3"><i class="devicon-kubernetes-plain tech-icon"></i> KUBERNETES</span>
+            <span class="mx-6">·</span>
+            
+            <!-- 2nd Loop (끊기지 않고 무한 반복되도록 동일 내용 복붙) -->
+            <span class="flex items-center gap-3"><i class="devicon-react-original tech-icon"></i> REACT</span>
+            <span class="mx-6">·</span>
+            <span class="flex items-center gap-3"><i class="devicon-typescript-plain tech-icon"></i> TYPESCRIPT</span>
+            <span class="mx-6">·</span>
+            <span class="flex items-center gap-3"><i class="devicon-nextjs-plain tech-icon"></i> NEXT.JS</span>
+            <span class="mx-6">·</span>
+            <span class="flex items-center gap-3"><i class="devicon-nodejs-plain-wordmark tech-icon text-4xl"></i> NODE.JS</span>
+            <span class="mx-6">·</span>
+            <span class="flex items-center gap-3"><i class="devicon-spring-original tech-icon"></i> SPRING BOOT</span>
+            <span class="mx-6">·</span>
+            <span class="flex items-center gap-3"><i class="devicon-amazonwebservices-plain-wordmark tech-icon text-4xl"></i> AWS</span>
+            <span class="mx-6">·</span>
+            <span class="flex items-center gap-3"><i class="devicon-python-plain tech-icon"></i> PYTHON</span>
+            <span class="mx-6">·</span>
+            <span class="flex items-center gap-3"><i class="devicon-docker-plain tech-icon"></i> DOCKER</span>
+            <span class="mx-6">·</span>
+            <span class="flex items-center gap-3"><i class="devicon-kubernetes-plain tech-icon"></i> KUBERNETES</span>
+            <span class="mx-6">·</span>
+            
+            <!-- 2nd Loop (끊기지 않고 무한 반복되도록 동일 내용 복붙) -->
+            <span class="flex items-center gap-3"><i class="devicon-react-original tech-icon"></i> REACT</span>
+            <span class="mx-6">·</span>
+            <span class="flex items-center gap-3"><i class="devicon-typescript-plain tech-icon"></i> TYPESCRIPT</span>
+            <span class="mx-6">·</span>
+            <span class="flex items-center gap-3"><i class="devicon-nextjs-plain tech-icon"></i> NEXT.JS</span>
+            <span class="mx-6">·</span>
+            <span class="flex items-center gap-3"><i class="devicon-nodejs-plain tech-icon"></i> NODE.JS</span>
+            <span class="mx-6">·</span>
+            <span class="flex items-center gap-3"><i class="devicon-spring-original tech-icon"></i> SPRING BOOT</span>
+            <span class="mx-6">·</span>
+            <span class="flex items-center gap-3"><i class="devicon-amazonwebservices-original tech-icon"></i> AWS</span>
+            <span class="mx-6">·</span>
+            <span class="flex items-center gap-3"><i class="devicon-python-plain tech-icon"></i> PYTHON</span>
+            <span class="mx-6">·</span>
+            <span class="flex items-center gap-3"><i class="devicon-docker-plain tech-icon"></i> DOCKER</span>
+            <span class="mx-6">·</span>
+            <span class="flex items-center gap-3"><i class="devicon-kubernetes-plain tech-icon"></i> KUBERNETES</span>
+            <span class="mx-6">·</span>
+        </div>
+    </div>
 
-      <section class="block" id="practice" aria-labelledby="practice-title">
-        <h2 id="practice-title">이 저장소</h2>
-        <ol class="steps">
-          <li>바꿀 내용을 이슈로 엽니다.</li>
-          <li>브랜치에서 작업하고 풀 리퀘스트를 만듭니다.</li>
-          <li>리뷰 의견을 반영하고, 검사가 통과하면 머지합니다.</li>
-        </ol>
-        <p class="actions">
-          <a href="https://github.com/snjune6/snjune6.github.io/issues">이슈</a>
-          <a href="https://github.com/snjune6/snjune6.github.io/pulls">풀 리퀘스트</a>
-        </p>
-      </section>
+    <!-- Projects Section (아코디언 방식 도입) -->
+    <section id="work" class="py-20 md:py-32 px-6 md:px-12">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
+            <div class="col-span-1">
+                <h2 class="text-sm font-bold uppercase tracking-widest text-gray-400 mb-4 font-mono">&gt;_ REPOSITORIES</h2>
+            </div>
+            
+            <div class="col-span-1 md:col-span-3">
+                <div class="border-t border-black dark:border-white">
+                    
+                    <!-- Project 1 -->
+                    <div class="border-b border-black dark:border-gray-800">
+                        <button class="accordion-btn w-full py-8 md:py-12 flex justify-between items-center text-left group" aria-expanded="false">
+                            <span class="text-3xl md:text-5xl lg:text-6xl font-black group-hover:text-gray-400 transition-colors tracking-tighter">대규모 커머스 플랫폼 개선</span>
+                            <span class="text-4xl font-light accordion-icon">+</span>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-gray-600 dark:text-gray-400 pb-8">
+                                <div>
+                                    <p class="font-bold text-black dark:text-white mb-2 uppercase tracking-widest text-sm">Overview</p>
+                                    <p class="font-light leading-relaxed">월간 활성 사용자(MAU) 200만 명 규모의 이커머스 플랫폼 프론트엔드 아키텍처를 Next.js로 마이그레이션하여 초기 로딩 속도(LCP)를 40% 단축하고, SEO 점수를 크게 향상시켰습니다.</p>
+                                </div>
+                                <div>
+                                    <p class="font-bold text-black dark:text-white mb-2 uppercase tracking-widest text-sm">Tech Stack</p>
+                                    <p class="font-light mb-4">Next.js, TypeScript, React Query, Tailwind CSS</p>
+                                    <a href="#" class="inline-block border border-black dark:border-white text-black dark:text-white px-6 py-2 rounded-full text-sm font-bold uppercase hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-colors">View GitHub</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-      <section class="block" id="contact" aria-labelledby="contact-title">
-        <h2 id="contact-title">연락</h2>
-        <p>
-          <a href="mailto:snjune6@naver.com">snjune6@naver.com</a>
-        </p>
-      </section>
-    </main>
-    <footer class="site-footer">
-      <p>© 2026 김준태</p>
-      <p>snjune6.github.io</p>
+                    <!-- Project 2 -->
+                    <div class="border-b border-black dark:border-gray-800">
+                        <button class="accordion-btn w-full py-8 md:py-12 flex justify-between items-center text-left group" aria-expanded="false">
+                            <span class="text-3xl md:text-5xl lg:text-6xl font-black group-hover:text-gray-400 transition-colors tracking-tighter">실시간 동시 편집 에디터</span>
+                            <span class="text-4xl font-light accordion-icon">+</span>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-gray-600 dark:text-gray-400 pb-8">
+                                <div>
+                                    <p class="font-bold text-black dark:text-white mb-2 uppercase tracking-widest text-sm">Overview</p>
+                                    <p class="font-light leading-relaxed">WebSocket과 CRDT 알고리즘을 활용하여 다수의 사용자가 지연 없이 동시에 문서를 편집할 수 있는 사내 협업 툴을 개발했습니다. 연결 안정성을 위한 재연결 로직을 직접 구현했습니다.</p>
+                                </div>
+                                <div>
+                                    <p class="font-bold text-black dark:text-white mb-2 uppercase tracking-widest text-sm">Tech Stack</p>
+                                    <p class="font-light mb-4">React, Node.js, Socket.io, Yjs, Redis</p>
+                                    <a href="#" class="inline-block border border-black dark:border-white text-black dark:text-white px-6 py-2 rounded-full text-sm font-bold uppercase hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-colors">View Project</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Project 3 -->
+                    <div class="border-b border-black dark:border-gray-800">
+                        <button class="accordion-btn w-full py-8 md:py-12 flex justify-between items-center text-left group" aria-expanded="false">
+                            <span class="text-3xl md:text-5xl lg:text-6xl font-black group-hover:text-gray-400 transition-colors tracking-tighter">디자인 시스템 구축</span>
+                            <span class="text-4xl font-light accordion-icon">+</span>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-gray-600 dark:text-gray-400 pb-8">
+                                <div>
+                                    <p class="font-bold text-black dark:text-white mb-2 uppercase tracking-widest text-sm">Overview</p>
+                                    <p class="font-light leading-relaxed">사내 여러 프로덕트에서 일관되게 사용할 수 있는 UI 컴포넌트 라이브러리를 개발 및 배포했습니다. Storybook을 활용하여 디자이너와의 커뮤니케이션 비용을 줄였습니다.</p>
+                                </div>
+                                <div>
+                                    <p class="font-bold text-black dark:text-white mb-2 uppercase tracking-widest text-sm">Tech Stack</p>
+                                    <p class="font-light mb-4">React, TypeScript, Styled-components, Storybook</p>
+                                    <a href="#" class="inline-block border border-black dark:border-white text-black dark:text-white px-6 py-2 rounded-full text-sm font-bold uppercase hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-colors">View Docs</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Timeline (새로 추가된 섹션) -->
+    <section id="experience" class="py-20 md:py-32 px-6 md:px-12 bg-gray dark:bg-darkSurface transition-colors duration-500 border-t border-black dark:border-white">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
+            <div class="col-span-1">
+                <h2 class="text-sm font-bold uppercase tracking-widest text-gray-500 mb-4">Experience</h2>
+            </div>
+            
+            <div class="col-span-1 md:col-span-3">
+                <div class="space-y-12">
+                    <!-- Exp Item -->
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-8">
+                        <div class="col-span-1 text-sm font-bold uppercase tracking-widest text-gray-400 pt-1">
+                            2024 - Present
+                        </div>
+                        <div class="col-span-3">
+                            <h3 class="text-2xl md:text-3xl font-bold mb-2">프론트엔드 개발자 <span class="font-light text-gray-500">@ Tech Startup</span></h3>
+                            <p class="font-light text-gray-600 dark:text-gray-400 leading-relaxed">
+                                핵심 프로덕트의 프론트엔드 파트를 리드하며, 레거시 코드 리팩토링 및 신규 피처 개발을 주도하고 있습니다. 사내 코드 리뷰 문화를 정착시키는 데 기여했습니다.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <!-- Exp Item -->
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-8 border-t border-gray-300 dark:border-gray-800 pt-12">
+                        <div class="col-span-1 text-sm font-bold uppercase tracking-widest text-gray-400 pt-1">
+                            2023 - 2024
+                        </div>
+                        <div class="col-span-3">
+                            <h3 class="text-2xl md:text-3xl font-bold mb-2">소프트웨어 엔지니어 인턴 <span class="font-light text-gray-500">@ Global IT Co.</span></h3>
+                            <p class="font-light text-gray-600 dark:text-gray-400 leading-relaxed">
+                                백오피스 어드민 패널 개발을 담당하며 대용량 데이터 그리드 최적화 경험을 쌓았습니다. RESTful API 설계 및 연동 과정을 통해 백엔드와의 원활한 협업 방식을 익혔습니다.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Exp Item -->
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-8 border-t border-gray-300 dark:border-gray-800 pt-12">
+                        <div class="col-span-1 text-sm font-bold uppercase tracking-widest text-gray-400 pt-1">
+                            2023
+                        </div>
+                        <div class="col-span-3">
+                            <h3 class="text-2xl md:text-3xl font-bold mb-2">컴퓨터공학과 학사 졸업</h3>
+                            <p class="font-light text-gray-600 dark:text-gray-400 leading-relaxed">
+                                자료구조, 알고리즘, 운영체제 등 컴퓨터 과학 기초를 탄탄히 다졌으며, 졸업 프로젝트로 AI 기반 챗봇 웹 애플리케이션을 성공적으로 런칭했습니다.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-32 md:py-52 px-6 md:px-12 bg-black text-white dark:bg-black border-t border-gray-800 text-center">
+        <div class="max-w-7xl mx-auto">
+            <p class="text-sm font-bold uppercase tracking-widest text-gray-400 mb-8 md:mb-12">커피 챗 & 채용 제안</p>
+            
+            <a href="mailto:snjune6@gmail.com" class="text-4xl sm:text-6xl md:text-8xl lg:text-[8rem] font-black tracking-tighter hover:text-gray-400 transition-colors break-all">
+                snjune6@<wbr>gmail.com
+            </a>
+            
+            <p class="mt-12 md:mt-20 text-gray-400 font-light text-sm md:text-base">
+                코드 이야기, 사이드 프로젝트, 채용 문의 모두 환영합니다.
+            </p>
+        </div>
+    </section>
+
+    <!-- Minimal Footer -->
+    <footer class="pt-8 pb-32 md:py-8 px-6 md:px-12 border-t border-gray-800 bg-black text-white dark:bg-black flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-bold uppercase tracking-widest">
+        <div>Copyright &copy; 2026 kkx2. All rights reserved.</div>
+        <div class="flex gap-6">
+            <a href="https://github.com/snjune6" target="_blank" rel="noopener noreferrer" class="hover:text-gray-400 transition-colors">GitHub</a>
+            <a href="#" class="hover:text-gray-400 transition-colors">LinkedIn</a>
+            <a href="#" class="hover:text-gray-400 transition-colors">Blog</a>
+        </div>
     </footer>
-  </body>
+
+    <!-- Scripts -->
+    <script>
+        // 1. Mobile Menu Logic
+        const btn = document.getElementById('mobile-menu-btn');
+        const menu = document.getElementById('mobile-menu');
+        const links = document.querySelectorAll('.mobile-link');
+        const pill = document.getElementById('floating-pill');
+        const navWrapper = document.getElementById('nav-wrapper');
+
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            menu.classList.toggle('hidden');
+            btn.textContent = menu.classList.contains('hidden') ? 'Menu' : 'Close';
+        });
+
+        links.forEach(link => {
+            link.addEventListener('click', () => {
+                menu.classList.add('hidden');
+                btn.textContent = 'Menu';
+            });
+        });
+
+        // 2. Smart Header Logic
+        let lastScrollY = window.scrollY;
+        
+        const shrinkHeader = () => {
+            pill.classList.add('pill-shrunk');
+            navWrapper.classList.add('nav-shrunk');
+        };
+
+        const expandHeader = () => {
+            pill.classList.remove('pill-shrunk');
+            navWrapper.classList.remove('nav-shrunk');
+        };
+
+        window.addEventListener('scroll', () => {
+            if (!menu.classList.contains('hidden')) return;
+
+            const currentScrollY = window.scrollY;
+            
+            if (currentScrollY > 100 && currentScrollY > lastScrollY) {
+                shrinkHeader(); 
+            } else if (currentScrollY < lastScrollY) {
+                expandHeader(); 
+            }
+            lastScrollY = currentScrollY;
+        });
+
+        pill.addEventListener('mouseenter', expandHeader);
+
+        // 3. Dark Mode Toggle Logic
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const htmlElement = document.documentElement;
+
+        // 시스템 설정에 따른 초기 다크모드 설정 (선택적)
+        // if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        //     htmlElement.classList.add('dark');
+        // }
+
+        themeToggleBtn.addEventListener('click', (e) => {
+            e.stopPropagation(); // 헤더 확장을 방해하지 않도록 이벤트 전파 중단
+            htmlElement.classList.toggle('dark');
+        });
+
+        // 4. Accordion Logic
+        const accordions = document.querySelectorAll('.accordion-btn');
+        
+        accordions.forEach(acc => {
+            acc.addEventListener('click', function() {
+                // 토글 로직
+                const isExpanded = this.getAttribute('aria-expanded') === 'true';
+                this.setAttribute('aria-expanded', !isExpanded);
+                
+                const content = this.nextElementSibling;
+                if (!isExpanded) {
+                    content.classList.add('open');
+                } else {
+                    content.classList.remove('open');
+                }
+
+                // (선택) 다른 아코디언이 열려있다면 닫기 - 하나씩만 열어두고 싶을 때 주석 해제
+                /*
+                accordions.forEach(otherAcc => {
+                    if (otherAcc !== this && otherAcc.getAttribute('aria-expanded') === 'true') {
+                        otherAcc.setAttribute('aria-expanded', 'false');
+                        otherAcc.nextElementSibling.classList.remove('open');
+                    }
+                });
+                */
+            });
+        });
+    </script>
+</body>
 </html>
